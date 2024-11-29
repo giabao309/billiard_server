@@ -48,6 +48,17 @@ const registerUser = async (req, res) => {
   }
 };
 
+const getUserByID = async (req, res) => {
+  try {
+    const { user_id } = req.body;
+
+    const users = await userRepository.getUserByID(user_id);
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const getEmployee = async (req, res) => {
   try {
     const employees = await userRepository.getEmployee();
@@ -59,13 +70,19 @@ const getEmployee = async (req, res) => {
 
 const getEmployeeByID = async (req, res) => {
   try {
-    const { employeeID } = req.body;
+    const { employee_id } = req.body;
 
-    const employees = await userRepository.getEmployeeByID(employeeID);
+    const employees = await userRepository.getEmployeeByID(employee_id);
     res.json(employees);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };
 
-export default { getEmployee, registerUser, login, getEmployeeByID };
+export default {
+  getEmployee,
+  registerUser,
+  login,
+  getEmployeeByID,
+  getUserByID,
+};

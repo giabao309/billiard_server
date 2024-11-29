@@ -43,64 +43,21 @@ const login = async ({ email, password }) => {
 
     // Tạo JWT token và trả về
     const token = generateToken({
-      userId: user.user_id,
-      userName: user.user_name,
+      userId: user.id,
+      userName: user.name,
       roleId: user.role_id,
     });
 
     return {
-      userId: user.user_id,
-      userName: user.user_name,
+      userId: user.id,
+      userName: user.name,
       roleId: user.role_id,
-      token: token, // Trả về token cùng thông tin người dùng
+      token: token,
     };
   } catch (error) {
     throw new Error(error.message);
   }
 };
-
-// const registerUser = async ({ email, user_name, numberphone, password }) => {
-//   if (!email || !user_name || !numberphone || !password) {
-//     throw new Error("Vui lòng nhập đầy đủ thông tin.");
-//   }
-
-//   try {
-//     const existingUser = await findUserByEmail(email);
-//     if (existingUser) {
-//       throw new Error("Email đã tồn tại.");
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 12);
-
-//     const newUser = new User(
-//       null,
-//       email,
-//       user_name,
-//       numberphone,
-//       hashedPassword,
-//       3
-//     );
-
-//     const query = `
-//       INSERT INTO users (email, user_name, numberphone, password, role_id)
-//       VALUES (?, ?, ?, ?, ?)
-//     `;
-
-//     const [result] = await db.execute(query, [
-//       newUser.email,
-//       newUser.user_name,
-//       newUser.numberphone,
-//       newUser.hashedPassword,
-//       newUser.role_id,
-//     ]);
-
-//     newUser.user_id = result.insertId;
-
-//     return newUser.toJSON();
-//   } catch (error) {
-//     throw new Error(error.message);
-//   }
-// };
 
 // Tạo người dùng mới
 const registerUser = async ({ email, user_name, numberphone, password }) => {
@@ -133,47 +90,28 @@ const registerUser = async ({ email, user_name, numberphone, password }) => {
   }
 };
 
+const getUserByID = async (user_id) => {
+  const [rows] = await db.query("SELECT * FROM users WHERE user_id = ?", [
+    user_id,
+  ]);
+  const users = User.fromDatabase(rows[0]);
+  return users;
+};
+
 const getEmployee = async () => {
   const [rows] = await db.query(
-    "SELECT e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name, sf.shift_name, e.salary FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e ON e.employee_id = ue.employee_id JOIN roles r ON r.role_id = u.role_id JOIN branches br ON br.branch_id = e.branch_id JOIN shifts sf ON sf.shift_id = e.shift_id"
+    "SELECT u.user_id, e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name,br.branch_id, s.shift_name, e.salary FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e on e.employee_id = ue.employee_id JOIN shifts s ON s.shift_id = e.shift_id JOIN branches br ON br.branch_id = e.branch_id"
   );
-  const employeeList = rows.map((employee) => {
-    const epl = new Employee(
-      employee.employee_id,
-      employee.email,
-      employee.user_name,
-      employee.numberphone,
-      employee.branch_name,
-      employee.shift_name,
-      employee.salary
-    );
-    return epl;
-  });
+  const employeeList = rows.map((row) => Employee.fromDatabase(row));
   return employeeList;
 };
 
-const getEmployeeByID = async (employeeID) => {
+const getEmployeeByID = async (employee_id) => {
   const [rows] = await db.query(
-    "SELECT e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name, sf.shift_name, e.salary " +
-      "FROM users u " +
-      "JOIN user_employee ue ON ue.user_id = u.user_id " +
-      "JOIN employees e ON e.employee_id = ue.employee_id " +
-      "JOIN roles r ON r.role_id = u.role_id " +
-      "JOIN branches br ON br.branch_id = e.branch_id " +
-      "JOIN shifts sf ON sf.shift_id = e.shift_id " +
-      "WHERE e.employee_id = ?",
-    [employeeID]
+    "SELECT u.user_id, e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name,br.branch_id, s.shift_name, e.salary FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e on e.employee_id = ue.employee_id JOIN shifts s ON s.shift_id = e.shift_id JOIN branches br ON br.branch_id = e.branch_id WHERE u.user_id = ?",
+    [employee_id]
   );
-
-  const employee = new Employee(
-    rows[0].employee_id,
-    rows[0].email,
-    rows[0].user_name,
-    rows[0].numberphone,
-    rows[0].branch_name,
-    rows[0].shift_name,
-    rows[0].salary
-  );
+  const employee = Employee.fromDatabase(rows[0]);
   return employee;
 };
 
@@ -183,4 +121,5 @@ export default {
   registerUser,
   login,
   getEmployeeByID,
+  getUserByID,
 };

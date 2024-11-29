@@ -24,7 +24,6 @@ const getBranchByUser = async (userID) => {
     "SELECT u.user_id, br.branch_name FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e ON e.employee_id = ue.employee_id JOIN branches br ON br.branch_id = e.branch_id WHERE u.user_id = ?",
     [userID]
   );
-  console.log(rows[0].branch_name);
   const branch = new BranchByEmployee(rows[0].user_id, rows[0].branch_name);
 
   return branch;
