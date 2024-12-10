@@ -71,7 +71,6 @@ const getEmployee = async (req, res) => {
 const getEmployeeByID = async (req, res) => {
   try {
     const { employee_id } = req.body;
-
     const employees = await userRepository.getEmployeeByID(employee_id);
     res.json(employees);
   } catch (error) {

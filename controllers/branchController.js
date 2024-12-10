@@ -37,4 +37,20 @@ const getDistrict = async (req, res) => {
   }
 };
 
-export default { getBranch, getAddress, getDistrict, getBranchByUser };
+const getFloorByBranch = async (req, res) => {
+  try {
+    const { branch_id } = req.body;
+    const floor = await branchRepository.getFloorByBranch(branch_id);
+    res.json(floor);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export default {
+  getBranch,
+  getAddress,
+  getDistrict,
+  getBranchByUser,
+  getFloorByBranch,
+};

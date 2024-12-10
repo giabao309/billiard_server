@@ -2,6 +2,7 @@ import db from "../databases/database.js";
 import Branch from "../models/branch/branch.js";
 import Address from "../models/branch/address.js";
 import District from "../models/branch/district.js";
+import Floor from "../models/branch/floor.js";
 import BranchByEmployee from "../models/branch/branchByEmployee.js";
 
 const getBranch = async () => {
@@ -50,4 +51,19 @@ const getDistrict = async () => {
   });
   return districtList;
 };
-export default { getBranch, getAddress, getDistrict, getBranchByUser };
+
+const getFloorByBranch = async (branch_id) => {
+  const [rows] = await db.query("SELECT * FROM floors WHERE branch_id = ?", [
+    branch_id,
+  ]);
+  const floors = rows.map((row) => Floor.fromDatabase(row));
+  return floors;
+};
+
+export default {
+  getBranch,
+  getAddress,
+  getDistrict,
+  getBranchByUser,
+  getFloorByBranch,
+};
