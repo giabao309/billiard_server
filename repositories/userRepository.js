@@ -1,8 +1,9 @@
 import db from "../databases/database.js";
-import Employee from "../models/user/employee.js";
-import User from "../models/user/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Employee from "../models/user/employee.js";
+import User from "../models/user/user.js";
+import Customer from "../models/user/customer.js";
 
 const generateToken = (user) => {
   return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -115,6 +116,15 @@ const getEmployeeByID = async (employee_id) => {
   return employee;
 };
 
+const searchCustomer = async (query) => {
+  const [rows] = await db.query(
+    "SELECT * FROM users u WHERE (u.email LIKE ? OR u.numberphone LIKE ?) AND u.role_id = 3",
+    [`%${query}%`, `%${query}%`]
+  );
+  const customer = rows.map((row) => Customer.fromDatabase(row));
+  return customer;
+};
+
 export default {
   getEmployee,
   findUserByEmail,
@@ -122,4 +132,5 @@ export default {
   login,
   getEmployeeByID,
   getUserByID,
+  searchCustomer,
 };

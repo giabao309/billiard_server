@@ -78,10 +78,21 @@ const getEmployeeByID = async (req, res) => {
   }
 };
 
+const searchCustomer = async (req, res) => {
+  try {
+    const { query } = req.body;
+    const customer = await userRepository.searchCustomer(query);
+    res.json(customer);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export default {
   getEmployee,
   registerUser,
   login,
   getEmployeeByID,
   getUserByID,
+  searchCustomer,
 };
