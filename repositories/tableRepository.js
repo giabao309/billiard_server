@@ -24,4 +24,36 @@ const getTableStatus = async () => {
   const status = rows.map((row) => Status.fromDatabase(row));
   return status;
 };
-export default { getTable, getTableByBranch, getTableStatus };
+
+const updateOpenTable = async (table_id) => {
+  const result = await db.query(
+    "UPDATE tables tb SET tb.table_status_id = 2 WHERE tb.table_id = ?",
+    [table_id]
+  );
+
+  if (result.affectedRows === 0) {
+    throw new Error("Bàn không tồn tại.");
+  }
+
+  return { success: true, message: "Mở bàn thành công!" };
+};
+
+const updateCloseTable = async (table_id) => {
+  const result = await db.query(
+    "UPDATE tables tb SET tb.table_status_id = 1 WHERE tb.table_id = ?",
+    [table_id]
+  );
+
+  if (result.affectedRows === 0) {
+    throw new Error("Bàn không tồn tại.");
+  }
+
+  return { success: true, message: "Đóng bàn thành công!" };
+};
+export default {
+  getTable,
+  getTableByBranch,
+  getTableStatus,
+  updateOpenTable,
+  updateCloseTable,
+};

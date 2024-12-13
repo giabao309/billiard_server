@@ -27,4 +27,23 @@ const getTableStatus = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-export default { getTable, getTableByBranch, getTableStatus };
+
+const updateOpenTable = async (req, res) => {
+  const { table_id } = req.body;
+  const result = await tableRepository.updateOpenTable(table_id);
+  res.status(200).json({ message: "Success" });
+};
+
+const updateCloseTable = async (req, res) => {
+  const { table_id } = req.body;
+  const result = await tableRepository.updateCloseTable(table_id);
+  res.status(200).json({ message: "Success" });
+};
+
+export default {
+  getTable,
+  getTableByBranch,
+  getTableStatus,
+  updateOpenTable,
+  updateCloseTable,
+};
