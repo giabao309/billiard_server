@@ -68,10 +68,10 @@ const getEmployee = async (req, res) => {
   }
 };
 
-const getEmployeeByID = async (req, res) => {
+const getEmployeeByUserID = async (req, res) => {
   try {
-    const { employee_id } = req.body;
-    const employees = await userRepository.getEmployeeByID(employee_id);
+    const { user_id } = req.body;
+    const employees = await userRepository.getEmployeeByUserID(user_id);
     res.json(employees);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -92,7 +92,7 @@ export default {
   getEmployee,
   registerUser,
   login,
-  getEmployeeByID,
+  getEmployeeByUserID,
   getUserByID,
   searchCustomer,
 };

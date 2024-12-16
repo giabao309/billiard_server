@@ -1,7 +1,7 @@
 import db from "../databases/database.js";
-import Service from "../models/service.js";
-import ServiceType from "../models/serviceType.js";
-import ServiceCategory from "../models/serviceCategory.js";
+import Service from "../models/service/service.js";
+import ServiceType from "../models/service/serviceType.js";
+import ServiceCategory from "../models/service/serviceCategory.js";
 
 const getService = async () => {
   const [rows] = await db.query(

@@ -107,10 +107,10 @@ const getEmployee = async () => {
   return employeeList;
 };
 
-const getEmployeeByID = async (employee_id) => {
+const getEmployeeByUserID = async (user_id) => {
   const [rows] = await db.query(
     "SELECT u.user_id, e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name,br.branch_id, s.shift_name, e.salary FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e on e.employee_id = ue.employee_id JOIN shifts s ON s.shift_id = e.shift_id JOIN branches br ON br.branch_id = e.branch_id WHERE u.user_id = ?",
-    [employee_id]
+    [user_id]
   );
   const employee = Employee.fromDatabase(rows[0]);
   return employee;
@@ -130,7 +130,7 @@ export default {
   findUserByEmail,
   registerUser,
   login,
-  getEmployeeByID,
+  getEmployeeByUserID,
   getUserByID,
   searchCustomer,
 };
