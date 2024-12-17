@@ -47,10 +47,32 @@ const getFloorByBranch = async (req, res) => {
   }
 };
 
+const createBranch = async (req, res) => {
+  try {
+    const { branch_name, branch_address, branch_district, branch_phone } =
+      req.body;
+
+    const branch_id = await branchRepository.createBranch({
+      branch_name,
+      branch_address,
+      branch_district,
+      branch_phone,
+    });
+
+    res.status(201).json({
+      message: "Thêm chi nhánh thành công",
+      branch_id,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi: " + error.message });
+  }
+};
+
 export default {
   getBranch,
   getAddress,
   getDistrict,
   getBranchByUser,
   getFloorByBranch,
+  createBranch,
 };

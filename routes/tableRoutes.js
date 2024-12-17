@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/", tableController.getTable);
 router.post("/branch", tableController.getTableByBranch);
+router.post("/BranchAndFloor", tableController.getTableByBranchAndFloor);
+router.post("/BranchAndStatus", tableController.getTableByBranchAndStatus);
 router.post("/id", tableController.getTableByID);
 router.get("/status", tableController.getTableStatus);
 router.post("/openTable", tableController.updateOpenTable);

@@ -60,10 +60,31 @@ const getFloorByBranch = async (branch_id) => {
   return floors;
 };
 
+const createBranch = async ({
+  branch_name,
+  branch_address,
+  branch_district,
+  branch_phone,
+}) => {
+  console.log(branch_name);
+  const query = `
+            INSERT INTO branches (branch_name, branch_address, branch_district, branch_phone) VALUES (?, ?, ?, ?)
+        `;
+
+  const [result] = await db.execute(query, [
+    branch_name,
+    branch_address,
+    branch_district,
+    branch_phone,
+  ]);
+  return result.insertId;
+};
+
 export default {
   getBranch,
   getAddress,
   getDistrict,
   getBranchByUser,
   getFloorByBranch,
+  createBranch,
 };

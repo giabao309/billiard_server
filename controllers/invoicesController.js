@@ -53,9 +53,32 @@ const createInvoices = async (req, res) => {
   }
 };
 
+const updateInvoicePayment = async (req, res) => {
+  try {
+    const { customer_id, playtime, promotion_id, total_cost, invoices_id } =
+      req.body;
+
+    const invoice_id = await invoiceRepository.updateInvoicePayment({
+      customer_id,
+      playtime,
+      promotion_id,
+      total_cost,
+      invoices_id,
+    });
+
+    res.status(201).json({
+      message: "Thanh toán thành công",
+      invoice_id,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi: " + error.message });
+  }
+};
+
 export default {
   getInvoicesUnpaidByTableID,
   createInvoices,
   getInvoicesDetailByID,
   getPromotion,
+  updateInvoicePayment,
 };

@@ -8,5 +8,6 @@ router.get("/address", branchController.getAddress);
 router.get("/district", branchController.getDistrict);
 router.post("/user", branchController.getBranchByUser);
 router.post("/floor", branchController.getFloorByBranch);
+router.post("/createBranch", branchController.createBranch);
 
 export default router;

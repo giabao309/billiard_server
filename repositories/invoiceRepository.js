@@ -35,7 +35,7 @@ const createInvoices = async ({
 }) => {
   try {
     const query = `
-          INSERT INTO invoices (branch_id, employee_id, table_id, create_date, invoices_status_id) VALUES (?, ?, ?, ?, 2)
+          INSERT INTO invoices (branch_id, employee_id, table_id, create_date, promotion_id, invoices_status_id) VALUES (?, ?, ?, ?, 6, 2)
       `;
 
     const [result] = await db.execute(query, [
@@ -51,9 +51,30 @@ const createInvoices = async ({
   }
 };
 
+const updateInvoicePayment = async ({
+  customer_id,
+  playtime,
+  promotion_id,
+  total_cost,
+  invoices_id,
+}) => {
+  const query = `
+          UPDATE invoices SET customer_id = ?, playtime = ?, promotion_id = ?, total_cost = ?, invoices_status_id = 1 WHERE invoices_id = ?
+      `;
+
+  const result = await db.execute(query, [
+    customer_id,
+    playtime,
+    promotion_id,
+    total_cost,
+    invoices_id,
+  ]);
+};
+
 export default {
   getInvoicesUnpaidByTableID,
   createInvoices,
   getInvoicesDetailByID,
   getPromotion,
+  updateInvoicePayment,
 };
