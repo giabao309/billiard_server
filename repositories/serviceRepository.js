@@ -5,18 +5,10 @@ import ServiceCategory from "../models/service/serviceCategory.js";
 
 const getService = async () => {
   const [rows] = await db.query(
-    "SELECT sv.service_id, sv.service_name, sv.service_price, t.service_type_name FROM services sv JOIN service_type t ON t.service_type_id = sv.service_type_id"
+    "SELECT sv.service_id, sv.service_name, sv.service_price, t.service_type_name, sv.img FROM services sv JOIN service_type t ON t.service_type_id = sv.service_type_id"
   );
-  const serviceList = rows.map((service) => {
-    const sv = new Service(
-      service.service_id,
-      service.service_name,
-      service.service_price,
-      service.service_type_name
-    );
-    return sv;
-  });
-  return serviceList;
+  const services = rows.map((row) => Service.fromDatabase(row));
+  return services;
 };
 
 const getServiceType = async () => {
