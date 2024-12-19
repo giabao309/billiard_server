@@ -59,14 +59,14 @@ const getFloorByBranch = async (req, res) => {
 
 const createBranch = async (req, res) => {
   try {
-    const { branch_name, branch_address, branch_district, branch_phone } =
-      req.body;
+    console.log("Request body:", req.body);
+    const { id, name, address, district } = req.body;
 
     const branch_id = await branchRepository.createBranch({
-      branch_name,
-      branch_address,
-      branch_district,
-      branch_phone,
+      branch_name: id,
+      branch_address: name,
+      branch_district: address,
+      branch_phone: district,
     });
 
     res.status(201).json({
@@ -74,7 +74,38 @@ const createBranch = async (req, res) => {
       branch_id,
     });
   } catch (error) {
+    console.error("Lỗi khi thêm chi nhánh:", error.message);
     res.status(500).json({ message: "Lỗi: " + error.message });
+  }
+};
+
+const getBranch2 = async (req, res) => {
+  try {
+    const branch2 = await branchRepository.getBranch2();
+    res.json(branch2);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getBranchDetailsById = async (req, res) => {
+  try {
+    const { branch_id } = req.query;
+
+    if (!branch_id) {
+      return res.status(400).json({ message: "branch_id is required" });
+    }
+
+    const branch = await branchRepository.getBranchDetailsById(branch_id);
+
+    if (branch.length === 0) {
+      return res.status(404).json({ message: "Branch not found" });
+    }
+
+    res.status(200).json(branch[0]);
+  } catch (error) {
+    console.error("Error fetching branch details:", error.message);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -86,4 +117,6 @@ export default {
   getFloorByBranch,
   createBranch,
   getBranchByID,
+  getBranch2,
+  getBranchDetailsById,
 };

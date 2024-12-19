@@ -75,7 +75,6 @@ const createBranch = async ({
   branch_district,
   branch_phone,
 }) => {
-  console.log(branch_name);
   const query = `
             INSERT INTO branches (branch_name, branch_address, branch_district, branch_phone) VALUES (?, ?, ?, ?)
         `;
@@ -89,6 +88,24 @@ const createBranch = async ({
   return result.insertId;
 };
 
+const getBranch2 = async () => {
+  const [rows] = await db.query(
+    "SELECT branch_id, branch_name, branch_address, branch_district, branch_phone FROM branches"
+  );
+  return rows;
+};
+
+const getBranchDetailsName = async (branch_id) => {
+  const [rows] = await db.query(
+    `SELECT branch_name
+           FROM branches 
+           WHERE branch_id = ?`,
+    [branch_id]
+  );
+  const branchid = rows.map((row) => Branch.fromDatabase(row));
+  return branchid;
+};
+
 export default {
   getBranch,
   getAddress,
@@ -97,4 +114,6 @@ export default {
   getFloorByBranch,
   createBranch,
   getBranchByID,
+  getBranch2,
+  getBranchDetailsName,
 };

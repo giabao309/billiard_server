@@ -7,6 +7,7 @@ import userRoutes from "./routes/userRoutes.js";
 import invoicesRoutes from "./routes/invoicesRoutes.js";
 import homepageRoutes from "./routes/homepageRoutes.js";
 import manageRoutes from "./routes/manageRoutes.js";
+import storageRoutes from "./routes/storageRoutes.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/homepage", homepageRoutes);
 app.use("/api/manage", manageRoutes);
+app.use("/api/storages", storageRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
