@@ -74,8 +74,8 @@ const registerUser = async ({ email, user_name, numberphone, password }) => {
     }
 
     const query = `
-          INSERT INTO users (email, user_name, numberphone, password, role_id)
-          VALUES (?, ?, ?, ?, 3)
+          INSERT INTO users (email, user_name, numberphone, password, role_id, membership_id)
+          VALUES (?, ?, ?, ?, 3, 4)
       `;
 
     const [result] = await db.execute(query, [
@@ -101,8 +101,14 @@ const getUserByID = async (user_id) => {
 
 const getEmployee = async () => {
   const [rows] = await db.query(
-    "SELECT u.user_id, e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name,br.branch_id, s.shift_name, e.salary FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e on e.employee_id = ue.employee_id JOIN shifts s ON s.shift_id = e.shift_id JOIN branches br ON br.branch_id = e.branch_id"
+    "SELECT u.user_id, e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name,e.branch_id, s.shift_name,e.shift_id, e.salary FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e on e.employee_id = ue.employee_id JOIN shifts s ON s.shift_id = e.shift_id JOIN branches br ON br.branch_id = e.branch_id"
   );
+  const employeeList = rows.map((row) => Employee.fromDatabase(row));
+  return employeeList;
+};
+
+const getCustomer = async () => {
+  const [rows] = await db.query("SELECT * FROM users u WHERE u.role_id = 3");
   const employeeList = rows.map((row) => Employee.fromDatabase(row));
   return employeeList;
 };
@@ -125,6 +131,24 @@ const searchCustomer = async (query) => {
   return customer;
 };
 
+const searchCustomerManage = async (query) => {
+  const [rows] = await db.query(
+    "SELECT * FROM users u WHERE (u.email LIKE ? OR u.numberphone LIKE ?) AND u.role_id = 3",
+    [`%${query}%`, `%${query}%`]
+  );
+  const customer = rows.map((row) => Employee.fromDatabase(row));
+  return customer;
+};
+
+const searchEmployeeManage = async (query) => {
+  const [rows] = await db.query(
+    "SELECT u.user_id, e.employee_id, u.email, u.user_name, u.numberphone, br.branch_name,e.branch_id, s.shift_name,e.shift_id, e.salary FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e on e.employee_id = ue.employee_id JOIN shifts s ON s.shift_id = e.shift_id JOIN branches br ON br.branch_id = e.branch_id WHERE (u.email LIKE ? OR u.numberphone LIKE ?) AND u.role_id = 2",
+    [`%${query}%`, `%${query}%`]
+  );
+  const customer = rows.map((row) => Employee.fromDatabase(row));
+  return customer;
+};
+
 export default {
   getEmployee,
   findUserByEmail,
@@ -133,4 +157,7 @@ export default {
   getEmployeeByUserID,
   getUserByID,
   searchCustomer,
+  getCustomer,
+  searchCustomerManage,
+  searchEmployeeManage,
 };

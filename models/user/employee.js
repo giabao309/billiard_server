@@ -8,6 +8,7 @@ class Employee {
     branch,
     branch_id,
     shift,
+    shift_id,
     salary
   ) {
     this.user_id = user_id;
@@ -18,6 +19,7 @@ class Employee {
     this.branch = branch;
     this.branch_id = branch_id;
     this.shift = shift;
+    this.shift_id = shift_id;
     this.salary = salary;
   }
 
@@ -31,6 +33,7 @@ class Employee {
       row.branch_name,
       row.branch_id,
       row.shift_name,
+      row.shift_id,
       row.salary
     );
   }

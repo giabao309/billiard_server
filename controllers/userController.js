@@ -68,6 +68,15 @@ const getEmployee = async (req, res) => {
   }
 };
 
+const getCustomer = async (req, res) => {
+  try {
+    const employees = await userRepository.getCustomer();
+    res.json(employees);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const getEmployeeByUserID = async (req, res) => {
   try {
     const { user_id } = req.body;
@@ -88,6 +97,26 @@ const searchCustomer = async (req, res) => {
   }
 };
 
+const searchCustomerManage = async (req, res) => {
+  try {
+    const { query } = req.body;
+    const customer = await userRepository.searchCustomerManage(query);
+    res.json(customer);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const searchEmployeeManage = async (req, res) => {
+  try {
+    const { query } = req.body;
+    const customer = await userRepository.searchEmployeeManage(query);
+    res.json(customer);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export default {
   getEmployee,
   registerUser,
@@ -95,4 +124,7 @@ export default {
   getEmployeeByUserID,
   getUserByID,
   searchCustomer,
+  getCustomer,
+  searchCustomerManage,
+  searchEmployeeManage,
 };
