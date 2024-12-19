@@ -51,7 +51,7 @@ const getTableByID = async (table_id) => {
     "SELECT tb.table_id, tb.table_name, tb.table_price, t.table_type_name, st.table_status_id, st.table_status_name, fl.floor_id FROM tables tb JOIN table_type t ON t.table_type_id = tb.table_type_id JOIN table_status st ON st.table_status_id = tb.table_status_id JOIN floors fl ON fl.floor_id = tb.floor_id WHERE tb.table_id = ?",
     [table_id]
   );
-  const tables = rows.map((row) => Table.fromDatabase(row));
+  const tables = Table.fromDatabase(rows[0]);
   return tables;
 };
 

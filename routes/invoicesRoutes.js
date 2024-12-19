@@ -8,5 +8,10 @@ router.post("/createInvoices", invoicesController.createInvoices);
 router.post("/getInvoiceDetail", invoicesController.getInvoicesDetailByID);
 router.get("/promotion", invoicesController.getPromotion);
 router.post("/payment", invoicesController.updateInvoicePayment);
+router.post("/addOrUpdateItem", invoicesController.addOrUpdateItemInvoice);
+router.post(
+  "/deleteOrUpdateItem",
+  invoicesController.deleteOrUpdateItemInvoice
+);
 
 export default router;

@@ -20,6 +20,15 @@ const getBranch = async () => {
   return branchList;
 };
 
+const getBranchByID = async (branch_id) => {
+  const [rows] = await db.query(
+    "SELECT * FROM branches b WHERE b.branch_id = ?",
+    [branch_id]
+  );
+  const branch = rows.map((row) => Branch.fromDatabase(row));
+  return branch;
+};
+
 const getBranchByUser = async (userID) => {
   const [rows] = await db.query(
     "SELECT u.user_id, br.branch_name FROM users u JOIN user_employee ue ON ue.user_id = u.user_id JOIN employees e ON e.employee_id = ue.employee_id JOIN branches br ON br.branch_id = e.branch_id WHERE u.user_id = ?",
@@ -87,4 +96,5 @@ export default {
   getBranchByUser,
   getFloorByBranch,
   createBranch,
+  getBranchByID,
 };

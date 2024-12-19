@@ -75,10 +75,38 @@ const updateInvoicePayment = async (req, res) => {
   }
 };
 
+const addOrUpdateItemInvoice = async (req, res) => {
+  try {
+    const { invoice_id, service_id } = req.body;
+    const invoiceDetail = await invoiceRepository.addOrUpdateItemInvoice({
+      invoice_id,
+      service_id,
+    });
+    res.json(invoiceDetail);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteOrUpdateItemInvoice = async (req, res) => {
+  try {
+    const { invoice_id, service_id } = req.body;
+    const invoiceDetail = await invoiceRepository.deleteOrUpdateItemInvoice({
+      invoice_id,
+      service_id,
+    });
+    res.json(invoiceDetail);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export default {
   getInvoicesUnpaidByTableID,
   createInvoices,
   getInvoicesDetailByID,
   getPromotion,
   updateInvoicePayment,
+  addOrUpdateItemInvoice,
+  deleteOrUpdateItemInvoice,
 };

@@ -7,6 +7,7 @@ router.get("/", branchController.getBranch);
 router.get("/address", branchController.getAddress);
 router.get("/district", branchController.getDistrict);
 router.post("/user", branchController.getBranchByUser);
+router.post("/id", branchController.getBranchByID);
 router.post("/floor", branchController.getFloorByBranch);
 router.post("/createBranch", branchController.createBranch);
 

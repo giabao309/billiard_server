@@ -9,6 +9,16 @@ const getBranch = async (req, res) => {
   }
 };
 
+const getBranchByID = async (req, res) => {
+  try {
+    const { branch_id } = req.body;
+    const branch = await branchRepository.getBranchByID(branch_id);
+    res.json(branch);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const getBranchByUser = async (req, res) => {
   try {
     const { userID } = req.body;
@@ -75,4 +85,5 @@ export default {
   getBranchByUser,
   getFloorByBranch,
   createBranch,
+  getBranchByID,
 };

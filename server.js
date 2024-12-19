@@ -5,6 +5,7 @@ import branchRoutes from "./routes/branchRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import invoicesRoutes from "./routes/invoicesRoutes.js";
+import homepageRoutes from "./routes/homepageRoutes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use("/api/tables", tableRoutes);
 app.use("/api/branches", branchRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/homepage", homepageRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

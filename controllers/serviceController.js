@@ -9,6 +9,26 @@ const getService = async (req, res) => {
   }
 };
 
+const getServiceByType = async (req, res) => {
+  try {
+    const { type_id } = req.body;
+    const services = await serviceRepository.getServiceByType(type_id);
+    res.json(services);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getServiceByCate = async (req, res) => {
+  try {
+    const { category_id } = req.body;
+    const services = await serviceRepository.getServiceByCate(category_id);
+    res.json(services);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const getServiceType = async (req, res) => {
   try {
     const types = await serviceRepository.getServiceType();
@@ -26,4 +46,22 @@ const getServiceCategory = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-export default { getService, getServiceType, getServiceCategory };
+
+const searchService = async (req, res) => {
+  try {
+    const { query } = req.body;
+    const service = await serviceRepository.searchService(query);
+    res.json(service);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export default {
+  getService,
+  getServiceType,
+  getServiceCategory,
+  getServiceByType,
+  getServiceByCate,
+  searchService,
+};
