@@ -10,7 +10,7 @@ const getInvoicesUnpaidByTableID = async (table_id) => {
   );
 
   if (rows.length === 0) {
-    return;
+    return "noinvoice";
   } else {
     const invoice = InvoicesUnpaid.fromDatabase(rows[0]);
     return invoice;
@@ -22,6 +22,9 @@ const getInvoicesDetailByID = async (invoices_id) => {
     "SELECT id.invoice_detail_id, sr.service_id, sr.service_name, sr.service_price, id.service_quantity FROM invoice_detail id JOIN services sr ON sr.service_id = id.service_id WHERE id.invoice_id = ?",
     [invoices_id]
   );
+  if (rows.length === 0) {
+    return [];
+  }
   const invoiceDetail = rows.map((row) => InvoicesDetail.fromDatabase(row));
   return invoiceDetail;
 };
