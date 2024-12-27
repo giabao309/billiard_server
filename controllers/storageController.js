@@ -98,9 +98,56 @@ const searchWarehouseByServiceName = async (req, res) => {
   }
 };
 
+const createStorage = async (req, res) => {
+  try {
+    console.log("Request body:", req.body);
+
+    const { branch_id, service_id, category_id, entry_price, entry_quantity } = req.body;
+
+    if (!branch_id || !service_id || !category_id || !entry_price || !entry_quantity) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const result = await storageRepository.createStorage({
+      branch_id,
+      service_id,
+      category_id,
+      entry_price,
+      entry_quantity,
+    });
+
+    res.status(201).json({ message: "Sản phẩm đã được thêm vào kho", result });
+  } catch (error) {
+    console.error("Error adding item to warehouse:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getServices = async (req, res) => {
+  try {
+    const services = await storageRepository.getServices();
+    res.status(200).json(services);
+  } catch (error) {
+    console.error("Error fetching services:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getCategories = async (req, res) => {
+  try {
+    const categories = await storageRepository.getCategories();
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error("Error fetching categories:", error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 export default {
   getWarehouseByBranchId,
   deleteWarehouseItem,
   updateWarehouseItem,
   searchWarehouseByServiceName,
+  createStorage,
+  getServices,
+  getCategories
 };

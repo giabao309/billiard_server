@@ -77,9 +77,31 @@ const searchWarehouseByServiceName = async (branch_id, service_name) => {
   return rows;
 };
 
+const createStorage = async ({ branch_id, service_id, category_id, entry_price, entry_quantity }) => {
+  const [result] = await db.query(
+    `INSERT INTO warehouse (branch_id, service_id, entry_date, entry_quantity, entry_price)
+     VALUES (?, ?, CURRENT_DATE, ?, ?)`,
+    [branch_id, service_id, entry_quantity, entry_price]
+  );
+
+  return result;
+};
+
+const getServices = async () => {
+  const [rows] = await db.query(`SELECT service_id, service_name FROM services`);
+  return rows;
+};
+const getCategories = async () => {
+  const [rows] = await db.query(`SELECT service_category_id, service_category_name FROM service_category`);
+  return rows;
+};
+
 export default {
   getWarehouseByBranchId,
   deleteItemById,
   updateWarehouseItemById,
   searchWarehouseByServiceName,
+  createStorage,
+  getServices,
+  getCategories
 };
